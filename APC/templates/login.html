@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="/APC/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/APC/static/css/style.css">
+    <script src="/APC/static/js/jquery.js"></script>
+    <script src="/APC/static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="page login-page">
+    <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+            <div class="row">
+                <!-- Logo & Information Panel-->
+                <div class="col-lg-6">
+                    <div class="info d-flex align-items-center">
+                        <div class="content">
+                            <div class="logo">
+                                <h1>Welcome to login</h1>
+                            </div>
+                            <p>Auction Personal Collection System</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form Panel -->
+                <div class="col-lg-6 bg-dgrey">
+                    <div class="form d-flex align-items-center">
+                        <div class="content">
+                            <form method="post" action="/accounts/login/" class="form-validate">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input id="login-username" type="text" name="username" required
+                                           data-msg="Please input Username" placeholder="Username"
+                                           class="input-material bg-dgrey">
+                                </div>
+                                <div class="form-group">
+                                    <input id="login-password" type="password" name="password" required
+                                           data-msg="Please input your Password" placeholder="Password"
+                                           class="input-material bg-dgrey">
+                                </div>
+                                <button id="login" type="submit" class="btn btn-success">Login</button>
+                            </form>
+                            <br/>
+                            <small>No account?</small>
+                            <p></p>
+                            <a href="/accounts/buy_register/" class="signup">&nbsp;Buyer register</a>
+                            <p></p>
+                            <a href="/accounts/sell_register/" class="signup">&nbsp;Seller register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
