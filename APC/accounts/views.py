@@ -92,10 +92,10 @@ def do_buy_register(request):
             new_user.mtype = int(mtype)
             new_user.save()
             # Jump to login page
-            return redirect("accounts:login")
+            return render(request, "login.html", {"msg": "Register successful"})
         else:
             # Register have some error, jump back to register page
-            return render(request, "buyregister.html", locals())
+            return render(request, "buyregister.html", {"msg": "Register error"})
     # Failed to add user, and prompt
     except Exception as e:
         print(e)
@@ -181,7 +181,7 @@ def do_sell_register(request):
             new_user.mtype = int(mtype)
             new_user.save()
             # Jump to login page
-            return redirect("accounts:login")
+            return render(request, "login.html", {"msg": "Register successful"})
         else:
             # Register have some error, jump back to register page
             return render(request, "sellregister.html", locals())
@@ -189,7 +189,7 @@ def do_sell_register(request):
     except Exception as e:
         print(e)
         msg = "Add failed, system error"
-        return render(request, "sellregister.html", locals())
+        return render(request, "sellregister.html", {"msg": "Register error"})
 
 
 # User login
