@@ -1,14 +1,14 @@
 from django.contrib import admin
 
 from .models import Category, Product, BuyPrice, Order
-
+from .utils import *
 
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
     fieldsets = (
         ['User information', {
-            'fields': ('sell_user', 'name', 'descp', 'img', 'sell_begin', 'sell_end', 'status', 'price', 'category'),
+            'fields': ('sell_user', 'name', 'detail', 'img', 'sell_begin', 'sell_end', 'status', 'price', 'category'),
         }],
     )
 
@@ -16,6 +16,14 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['status']
     list_editable = ["status"]
     search_fields = ['name']
+
+    def save_model(self, request, obj, form, change):
+        if form.is_valid():
+            if obj.sell_begin != "" and obj.sell_begin != None:
+                obj.sell_begin_stamp = float(get_stamp_by_time(obj.sell_begin.strftime('%Y-%m-%d %H:%M:%S')))
+            if obj.sell_end != "" and obj.sell_end != None:
+                obj.sell_end_stamp = float(get_stamp_by_time(obj.sell_end.strftime('%Y-%m-%d %H:%M:%S')))
+        super().save_model(request, obj, form, change)
 
 
 class BuyPriceAdmin(admin.ModelAdmin):
