@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block mymeta %}
+<style>
+    .container {
+        background: #6b6c75;
+        padding: 10px 20px 50px;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    section {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    section ul {
+        padding: 0;
+        overflow-y: auto;
+    }
+
+    .screen ul li {
+        padding: 10px;
+        border-bottom: 1px dashed #dbdbdb;
+        position: relative;
+        line-height: 27px;
+        list-style: none;
+    }
+
+    .screen ul li:last-child {
+        border-bottom: 0;
+    }
+
+    .screen li .firstterm {
+        position: absolute;
+        font-size: 18px;
+        width: 80px;
+        text-align: right;
+    }
+
+    .screen li .otherterm {
+        display: inline-block;
+        padding-left: 100px;
+    }
+
+    .ra-brand, .ra-type, .ra-sleeve, .ra-thickness, .ra-style {
+        position: relative;
+        display: inline-block;
+        height: 30px;
+        margin: 0 20px;
+    }
+
+    input[type=radio] + a {
+        display: inline-block;
+        padding: 0 15px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .screen1 {
+        min-height: 40px;
+        border: 1px solid #ddd;
+        line-height: 40px;
+    }
+
+    .screen1 div span {
+        display: inline-block;
+        padding: 5px 10px;
+        margin-left: 15px;
+        color: #797979;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="screen">
+        <ul>
+            <li>
+                <span class="firstterm ">Category: </span>
+                <div class="otherterm">
+                    <div class="ra-brand">
+                        <a href="/products">All</a>
+                    </div>
+                    {% for category in all_category %}
+                    <a href="/products?cid={{ category.id }}">
+                        <div class="ra-brand">
+                            {{ category.name }}
+                        </div>
+                    </a>
+                    {% endfor %}
+
+                </div>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    {% for product in all_products %}
+                    {% if product.mstatus == "1" or product.mstatus == "0" %}
+                    <div class="col-sm-3"
+                         style=" border: 2px solid #FFFFFF; border-radius: 20px; background-color: #3c3c3c; padding-top:15px; margin-top:15px; margin-right: 5px">
+                        <a href="/detail_products/?pid={{ product.id }}">
+                            <img src="/media/{{ product.img }}" alt="" width="100%">
+                            <p>{{ product.name }}</p>
+                        </a>
+                        <p>Current price: ￥ {{ product.price | floatformat:2 }}</p>
+                        <p>Auction start time: {{ product.sell_begin }}</p>
+                        <p>Auction end time: {{ product.sell_end }}</p>
+                        <p name="countdown" time="{{ product.sell_end_stamp }}" status="{{ product.mstatus }}"
+                           dif="{{ product.dif }}"
+                           id="m{{ product.id }}">Countdown: </p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        $('p[name=countdown]').each(function () {
+            var id = $(this).attr("id").trim()
+            var begin = $(this).attr("time").trim()
+            var mstatus = $(this).attr("status")
+            var dif = $(this).attr("dif")
+            if (begin.indexOf(".")) (
+                begin = begin.split(".")[0].trim()
+            )
+            if (mstatus == "0") {
+                $("#" + id).text("Auction not started")
+            } else if (mstatus == "1") {
+                window.setInterval(function () {
+                    console.log("------------------------------")
+                    var now = Number("" + Date.parse(new Date()) / 1000);
+                    var nbegin = Number(begin);
+                    var dif = nbegin - now
+                    console.log("begintype:" + typeof (nbegin))
+                    console.log("begin:" + nbegin)
+                    console.log("now:" + now)
+                    console.log("nowtype:" + typeof (now))
+                    console.log("dif:" + dif)
+                    console.log(now <= nbegin)
+                    if (now <= nbegin) {
+                        console.log("Countdown: " + dif + "s")
+                        var hour = parseInt(dif / 3600)
+                        var min = parseInt((dif - (hour * 3600)) / 60)
+                        var miao = parseInt(dif - (hour * 3600) - (min * 60))
+                        $("#" + id).text("Countdown: " + hour + "h," + min + "m，" + miao + "s")
+                    } else {
+                        console.log("Countdown: " + dif + "s")
+                        $("#" + id).text("uction closed")
+                    }
+                }, 1000);
+            } else {
+                $("#" + id).text("uction closed")
+            }
+        });
+    </script>
+</div>
+{% endblock %}
+

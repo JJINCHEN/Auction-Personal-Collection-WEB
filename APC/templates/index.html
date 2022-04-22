@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row" style="background: #6b6c75;">
+    <div class="col-md-12">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/APC/static/images/1-1.jpg" class="d-block w-100" alt="..." height="520px">
+                </div>
+                <div class="carousel-item">
+                    <img src="/APC/static/images/1-2.jpg" class="d-block w-100" alt="..." height="520px">
+                </div>
+                <div class="carousel-item">
+                    <img src="/APC/static/images/1-3.jpg" class="d-block w-100" alt="..." height="520px">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Prev</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 20px; background: #6b6c75;">
+    <div class="col-md-4">
+        <img src="/APC/static/images/LOGO.png" width="100%" alt="LOGO"
+             style=" margin: auto; border-radius:50px">
+    </div>
+    <div class="col-md-8">
+        <div class="jumbotron" style="background:#3c3c3c">
+            <h1 class="display-5">Auction Now Introduction</h1>
+            <div style="">
+                <br>
+                Auction Now provides an auction platform for multiple parties to provide a satisfactory service to all
+                users. The system is user-focused, with simple and clear displays and functions. The system is committed
+                to keeping auction data open at all times. If you have any problems, please contact us by phone and we
+                will give you feedback as soon as possible.<br><br>
+                Hopefully you will have a pleasant bidding and shopping experience!
+                <br>
+            </div>
+            <br>
+            <a class="btn btn-primary btn-lg" href="/products" role="button">Start the auction</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

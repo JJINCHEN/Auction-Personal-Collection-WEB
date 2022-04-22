@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SUCCESSFUL</title>
 </head>
 <body>
-<H1>SUCCESSFUL</H1>
+    <script>
+    {% if msg %}
+        alert("{{ msg }}")
+    {% endif %}
+</script>
 </body>
 </html>

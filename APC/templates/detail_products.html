@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block mymeta %}
+<style>
+    .container {
+        padding: 10px 20px 50px;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .btn-info {
+        width: 120px;
+        margin-left: 30px;
+        background-color: #52851b;
+        border-color: #52851b;
+    }
+
+    table.table-info tr td {
+        font-size: 16px;
+        height: 35px;
+        line-height: 35px;
+    }
+
+    table.table tr td:first-child {
+        text-align: right;
+    }
+
+    table.table tr td:last-child {
+        text-indent: 30px;
+    }
+
+    .radio-row {
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        margin-right: 20px;
+        position: relative;
+    }
+
+    .radio-row input, .radio-row input + a {
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-indent: 0;
+        font-size: 14px;
+        text-align: center;
+        line-height: 30px;
+        color: #0e0e0e;
+    }
+
+    .radio-row input {
+        z-index: 10000;
+        opacity: 0;
+    }
+
+    .radio-row input + a {
+        border: 1px solid #ddd;
+    }
+
+    .radio-row input:checked + a {
+        border: 1px solid #c63205;
+        color: #c63205;
+    }
+
+    .panel-body img {
+        width: 70px;
+        height: 70px;
+        margin-right: 20px;
+    }
+
+    .table-info td {
+        border-color: #616871 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4">
+            <img src="/media/{{ product.img }}" alt="" width="100%" height="100%">
+        </div>
+        <div class="col-md-8">
+            <!-- Nav tabs -->
+            <ul class="nav" role="tablist">
+                <li role="presentation" class="active"
+                    style=" font-family: Georgia ;font-weight: bold; font-size: 25px">Product Details
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <table class="table table-info" style="background: #9495a0 !important; border-radius:10px">
+                        <tbody>
+                        <tr>
+                            <td class="col-xs-4">Auction time:</td>
+                            <td class="col-xs-4">{{ product.sell_begin }} - {{ product.sell_end }}</td>
+                        </tr>
+                        <tr>
+                            <td>Name:</td>
+                            <td>{{ product.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Category:</td>
+                            <td>{{ product.category.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>NOW:</td>
+                            {% if latest %}
+                            <td>Current price: ￡ {{ latest.price| floatformat:2 }},
+                                Bidders: {{ latest.user.username }}
+                            </td>
+
+                            {% else %}
+                            <td>Current price: ￡ {{ product.price| floatformat:2 }}, Bidders: floor price</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: right;">
+                                <input type="text" id="gei">
+                                <button type="button" class="btn btn-info" onclick="pai('{{ product.id }}')">Bid
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div style="margin: 15px; padding: 20px 20px; background-color: #3c3c3c; border-radius:15px; width:100%;">
+            <table align="center">
+                <tr style="text-align: center;">
+                    <th style="font-size: 20px">Product description:</th>
+                </tr>
+                <tr>
+                    <td>{{ product.detail }}</td>
+                </tr>
+            </table>
+        </div>
+        <table class="table table-striped" style="background-color: #7d7e88; margin: 20px">
+            <thead>
+            <tr>
+                <th scope="col">Bidders:</th>
+                <th scope="col">Bid:</th>
+                <th scope="col">Time:</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for buy in user_buy %}
+            <tr>
+                <th scope="row">{{ buy.user.username }}</th>
+                <td>￡ {{ buy.price| floatformat:2 }}</td>
+                <td>{{ buy.create_time }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function pai(pid) {
+        var price = $("#gei").val()
+        $.ajax({
+            type: "POST",
+            url: "/bid",
+            data: {"price": price, "pid": pid, "csrfmiddlewaretoken": "{{ csrf_token }}"},
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                layer.msg(data)
+            },
+            error: function (data) {
+                console.log(data.responseText)
+                layer.msg(data.responseText)
+                if (data.responseText == "Successful") {
+                    window.location.href = "/detail_products/?pid=" + pid
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
+

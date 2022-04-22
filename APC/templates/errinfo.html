@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ERROR</title>
-</head>
-<body>
-<H1>ERROR</H1>
-</body>
-</html>
+ {% block content %}
+
+    <div class="jumbotron" style="margin: 80px">
+        {% if msg %}
+            <h1 class="display-4">{{ msg }}</h1>
+        {% endif %}
+      <p class="lead">404 Error！！！</p>
+      <hr class="my-4">
+      <a class="btn btn-primary btn-lg" href="javascript:history.back(-1)" role="button">Return to previous page</a>
+    </div>
+
+  {% endblock %}

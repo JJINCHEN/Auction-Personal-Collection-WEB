@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block mymeta %}
+    <style>
+        ul {
+            border: 0;
+        }
+
+        .list-group-item {
+            margin-bottom: 0;
+            border: 0;
+            border-bottom: 1px dashed #ddd;
+            background-color: inherit;
+        }
+
+        .list2 {
+            border-bottom: 0;
+        }
+
+        .panel-default > .panel-heading {
+            color: #e4393c;
+            border-color: #fff;
+        }
+
+        .panel-default {
+            border-color: #fff;
+        }
+
+        .panel-group .panel-heading + .panel-collapse > .panel-body {
+            margin-top: 20px;
+            border-top: 1px solid #fff;
+        }
+
+        .save {
+            padding: 6px 30px;
+        }
+
+        .modal-content{
+            color: #3c3c3c;!important;
+        }
+        .row{
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+        }
+        .table{
+            color: white;!important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <ul class="list-group">
+                        <li class="list-group-item list2">
+                            <a>User Name:{{ request.user.username }}</a>
+                        </li>
+                        <li class="list-group-item list2">
+                            <a>Balance:￡ {{ request.user.money | floatformat:2 }}</a>
+                        </li>
+                        <li class="list-group-item list2">
+                            <button class="btn btn-info" data-target="#charging" data-toggle="modal">Charging</button>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="list-group-item">
+                    <ul class="list-group">
+                        <li class="list-group-item list2">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
+                               aria-controls="collapseOne">Personal Information</a>
+                        </li>
+                        <li class="list-group-item list2">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
+                               aria-controls="collapseTwo">My Order</a>
+                        </li>
+                        <li class="list-group-item list2">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+                               aria-expanded="false"
+                               aria-controls="collapseTwo">Participating Auction</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 40px">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                               aria-expanded="true" aria-controls="collapseOne">
+                                Personal information
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse in collapse show" role="tabpanel"
+                         aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <div class="col-md-offset-1 col-md-7">
+                                <form class="form-horizontal" style="margin-top: 40px" method="post"
+                                      action="/accounts/user_buy_modify">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="input1-1" class="col-sm-4 control-label">User Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input1-1" placeholder="username"
+                                                   name="username" value="{{ user.username }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input1-2" class="col-sm-4 control-label">Email</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input1-2" placeholder="email"
+                                                   name="email" value="{{ user.email }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input1-3" class="col-sm-4 control-label">Address</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="input1-3" placeholder="address"
+                                                   name="address" value="{{ user.address }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Password</label>
+                                        <div class="col-sm-8">
+                                            <a class="btn btn-success" data-toggle="modal" data-target="#modifyPwd">Modify
+                                                Password</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-8">
+                                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                                    data-target="#modifyAddress">Modify address information
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                My Order
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Pay</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <th scope="row"><a
+                                                    href="/detail_products?gid={{ order.product.id }}">{{ order.product.name }}</a>
+                                            </th>
+                                            <td>{{ order.price| floatformat:2 }}</td>
+                                            <td>{{ order.get_status_display }}</td>
+                                            {% if order.status == "0" %}
+                                                <td>
+                                                    <button class="btn btn-info" onclick="pay('{{ order.id }}')">Pay
+                                                    </button>
+                                                </td>
+                                            {% else %}
+                                                <td>Completed</td>
+                                            {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Participating Auction
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                         aria-labelledby="headingThree">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Picture</th>
+                                        <th scope="col">Current winner</th>
+                                        <th scope="col">Current price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for product in products %}
+                                        <tr>
+                                            <th scope="row"><a
+                                                    href="/detail_products/?pid={{ product.id }}">{{ product.name }}</a></th>
+                                            <td><img src="/media/{{ product.img }}" width="20px" height="20px"></td>
+                                            <td>{{ product.get_current_user }}</td>
+                                            <td>{{ product.get_current_price | floatformat:2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modifyPwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="margin-top: 20px;margin-left: 15px;font-weight:bold">Change Password</div>
+                <form class="form-horizontal" style="margin-top: 40px" action="/accounts/modify_buy_password"
+                      method="post">
+                    <!--Cross site forgery request-->
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="input2-1" class="col-sm-6 control-label">Old Password</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="input2-1" placeholder="old password"
+                                   name="old_password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input2-2" class="col-sm-6 control-label">New Password</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="input2-2" placeholder="new password" name="pwd1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input2-3" class="col-sm-6 control-label">Repassword</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="input2-3" placeholder="Re-enter the new password" name="pwd2">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <button type="submit" class="btn btn-success save">Determine</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="charging" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="margin-top: 20px;margin-left: 15px;font-weight:bold">Charging</div>
+                <form class="form-horizontal" style="margin-top: 40px" action="/accounts/charging" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="input3" class="col-sm-8 control-label">Enter the recharge amount (￡)</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="input3" placeholder="Amount" name="money">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <button type="submit" class="btn btn-success save">Determine</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="modifyAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div style="margin-top: 20px;margin-left: 15px;font-weight:bold">Address</div>
+                <form class="form-horizontal" style="margin-top: 40px" action="/accounts/address" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="input4" class="col-sm-8 control-label">Type the new address</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="input4" placeholder="New_address" name="address"
+                                   value="{{ request.user.address }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-8">
+                            <button type="submit" class="btn btn-success save">Determine</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <script>
+        function pay(pid) {
+            $.ajax({
+                type: "POST",
+                url: "/pay",
+                data: {"pid": pid},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    alert(data)
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data.responseText)
+                    alert(data.responseText)
+                    location.reload();
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
