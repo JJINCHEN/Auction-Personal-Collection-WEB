@@ -95,7 +95,7 @@ DATABASES = {
     }
 }
 # admin username: JINCHEN
-# admin password: JINCHENpassword
+# admin password: PASSWORD
 
 
 # Password validation
@@ -161,4 +161,8 @@ AUTHENTICATION_BACKENDS = [
     'accounts.auth.CustomBackend',
 ]
 
-# X_FRAME_OPTIONS = 'SAMEORIGIN'
+from .menu import MENU
+
+MENU = MENU
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
