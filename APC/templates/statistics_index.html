@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Statistics Index</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/APC/static/images/LOGO-2.png">
+    <link rel="stylesheet" href="/APC/static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/APC/static/css/layuimini.css" media="all">
+    <link rel="stylesheet" href="/APC/static/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <!--[if lt IE 9]>
+    <![endif]-->
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header header">
+        <div class="layui-logo">
+        </div>
+        <a>
+            <div class="layuimini-tool"><i title="Unfold" class="fa fa-outdent" data-side-fold="1"></i></div>
+        </a>
+
+        <ul class="layui-nav layui-layout-left layui-header-menu layui-header-pc-menu mobile layui-hide-xs">
+        </ul>
+        <ul class="layui-nav layui-layout-left layui-header-menu mobile layui-hide-sm">
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="fa fa-list-ul"></i> Choose of modules</a>
+                <dl class="layui-nav-child layui-header-mini-menu">
+                </dl>
+            </li>
+        </ul>
+
+        <ul class="layui-nav layui-layout-right">
+
+            <li class="layui-nav-item" lay-unselect>
+                <a href="javascript:;" data-refresh="Refresh"><i class="fa fa-refresh"></i></a>
+            </li>
+            <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
+                <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
+            </li>
+            <li class="layui-nav-item layuimini-setting">
+                <a href="javascript:;">{{ request.user.username }} Welcome tp used</a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="/accounts/logout" class="login-out">Exit</a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll layui-left-menu">
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div class="layui-tab" lay-filter="layuiminiTab" id="top_tabs_box">
+            <ul class="layui-tab-title" id="top_tabs">
+                <li class="layui-this" id="layuiminiHomeTabId" lay-id=""></li>
+            </ul>
+            <ul class="layui-nav closeBox">
+                <li class="layui-nav-item">
+                    <a href="javascript:;"> <i class="fa fa-dot-circle-o"></i> Page operation</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" data-page-close="other"><i class="fa fa-window-close"></i> Close
+                            other</a></dd>
+                        <dd><a href="javascript:;" data-page-close="all"><i class="fa fa-window-close-o"></i> Close all</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+            <div class="layui-tab-content clildFrame">
+                <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="/APC/static/lib/layui-v2.5.5/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="/APC/static/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+    layui.use(['element', 'layer', 'layuimini'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            layer = layui.layer;
+
+        layuimini.init('/menu');
+    });
+</script>
+</body>
+</html>

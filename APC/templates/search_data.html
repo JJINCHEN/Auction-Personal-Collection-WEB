@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Statistics Search data</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/APC/static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/APC/static/css/public.css" media="all">
+    <link rel="stylesheet" href="/APC/static/css/layuimini.css" media="all">
+    <style>
+        .layui-bg-number {
+            background-color: #F8F8F8;
+        }
+    </style>
+
+    <script src="/APC/static/laydate/laydate.js"></script>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>Select Date Range</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="margin-right: 0px;">
+                            <label class="layui-form-label">Date Range</label>
+                            <div class="layui-input-inline" style="margin-right: 0px;">
+                                <input type="text" name="keywords"
+                                       value="{% if keywords is not None %}{{ keywords }}{% endif %} "
+                                       autocomplete="off" id="keywords" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit=""
+                                    lay-filter="data-search-btn">Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div class="welcome-module">
+                                <div class="layui-row layui-col-space10">
+                                    <div class="layui-col-xs4">
+                                        <div class="panel layui-bg-number">
+                                            <div class="panel-body" style="padding: 24px 30px;">
+                                                <div class="panel-title">
+                                                    <h5>Expenditure Statistics</h5>
+                                                </div>
+                                                <div class="panel-content">
+                                                    <h1 class="no-margins">{% if expenditure_statistics.money_total is None %}
+                                                        0{% else %}
+                                                        {{ expenditure_statistics.money_total | floatformat:2 }}{% endif %}
+                                                        RMB</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs4">
+                                        <div class="panel layui-bg-number">
+                                            <div class="panel-body" style="padding: 24px 30px;">
+                                                <div class="panel-title">
+                                                    <h5>Income Statistics</h5>
+                                                </div>
+                                                <div class="panel-content">
+                                                    <h1 class="no-margins">{% if income_statistics.money_total is None %}
+                                                        0{% else %}
+                                                        {{ income_statistics.money_total | floatformat:2 }}{% endif %}
+                                                        RMB</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs4">
+                                        <div class="panel layui-bg-number">
+                                            <div class="panel-body" style="padding: 24px 30px;">
+                                                <div class="panel-title">
+                                                    <h5>Turnover Statistics</h5>
+                                                </div>
+                                                <div class="panel-content">
+                                                    <h1 class="no-margins">{% if turnover_statistics.money_total is None %}
+                                                        0{% else %}
+                                                        {{ turnover_statistics.money_total | floatformat:2 }}{% endif %}
+                                                        RMB</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="row" id="statistics" style="width: 100%; height: 400px"></div>
+    </div>
+</div>
+
+
+<script src="/APC/static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+
+<script src="/APC/static/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="/APC/static/js/jquery-1.10.2.min.js"></script>
+<script src="/APC/static/js/echarts.js"></script>
+<script src="/APC/static/js/echarts-wordcloud.js"></script>
+<script>
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+
+    //Date Range
+    laydate.render({
+        elem: '#keywords'
+        , lang: 'en'
+        , range: true
+        , trigger: 'click'
+        , min: '2021-12-31'
+        , max: getNowFormatDate()
+        , ready: function () {
+            ins22.hint('The date optional value is set at <br> 2022-12-31 to today');
+        }
+    });
+</script>
+<script>
+    var myChart = echarts.init(document.getElementById('statistics'), 'walden');
+    myChart.setOption({
+        series: [
+            {
+                name: 'Data statistics',
+                type: 'pie',    // Set the chart type to a pie chart
+                radius: '55%',  // For the radius of the pie chart, the outer radius is 55% of the viewable area size (the smaller of the container height and width).
+                data: [         // Data array, name is the name of data item, value is the value of data item
+                    {
+                        value: {% if expenditure_statistics.money_total is None %}0{% else %}{{ expenditure_statistics.money_total | floatformat:2 }}{% endif %},
+                        name: 'Expenditure statistics',
+                        itemStyle: {color: '#FF5100'}
+                    },
+                    {
+                        value: {% if income_statistics.money_total is None %}0{% else %}{{ income_statistics.money_total | floatformat:2 }}{% endif %},
+                        name: 'Income statistics'
+                    },
+                    {
+                        value: {% if turnover_statistics.money_total is None %}0{% else %}{{ turnover_statistics.money_total | floatformat:2 }}{% endif %},
+                        name: 'Turnover statistics'
+                    },
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b} : {c} ({d}%)'
+                        },
+                        labelLine: {show: true}
+                    }
+                }
+            }
+        ]
+    })
+</script>
+
+</body>
+</html>
