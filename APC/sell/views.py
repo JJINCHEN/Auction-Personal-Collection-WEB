@@ -36,6 +36,292 @@ def contract(request):
         print(e)
     return render(request, "contract.html", locals())
 
+# Statistics page Jump
+@login_required
+def statistics_index(request):
+    user = request.user
+    try:
+        pass
+    except Exception as e:
+        print(e)
+    return render(request, "statistics_index.html", locals())
+
+# Boss page of the statistics information
+@login_required
+def statistics(request):
+    user = request.user
+    try:
+        # Judge whether the user is boss or administrator
+        if user.mtype != 2:
+            msg = "You are not the BOSS can not view"
+            return render(request, "errinfo.html", locals())
+
+        # Count the number of different types of users
+        buyer = UserProfile.objects.filter(mtype=0).count()
+        seller = UserProfile.objects.filter(mtype=1).count()
+        admin = UserProfile.objects.filter(mtype=2).count()
+        total = TransferMoney.objects.filter().aggregate(money_total=Sum('money'))
+        # print(total)
+    except Exception as e:
+        print(e)
+    return render(request, "statistics.html", locals())
+
+# Jump to monthly statistics page
+@login_required
+def monthly_statistics(request):
+    user = request.user
+    try:
+        if user.mtype != 2:
+            msg = "You are not the BOSS can not view"
+            return render(request, "errinfo.html", locals())
+
+    except Exception as e:
+        print(e)
+    return render(request, "monthly_statistics.html", locals())
+
+# Statistics of expenditure information
+@csrf_exempt
+def expend_statistics(request):
+    admin_user = UserProfile.objects.filter(username="JINCHEN")[0]
+    x = []
+    y = []
+    # Choose a month from today as the starting time
+    begin_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
+    date_list = []
+    begin_date = datetime.datetime.strptime(begin_date, "%Y-%m-%d")
+    # end_date = datetime.datetime.strptime(time.strftime('%Y-%m-%d', time.localtime(time.time())), "%Y-%m-%d")
+    # print(end_date, 'end_dates')
+
+    # Time format conversion
+    now_time = int(time.time()) + 86400
+    day_time = now_time - now_time % 86400 + time.timezone
+    dateArray = datetime.datetime.fromtimestamp(day_time)
+    otherStyleTime = dateArray.strftime("%Y-%m-%d")
+    end_date = datetime.datetime.strptime(otherStyleTime, "%Y-%m-%d")
+
+    while begin_date <= end_date:
+        date_str = begin_date.strftime("%Y-%m-%d %H:%M:%S")
+        date_list.append(date_str)
+        begin_date += datetime.timedelta(days=1)
+    # Time format conversion
+    date_list.append("2022-05-25 00:00:00")
+    date_list.append("2021-05-25 00:00:00")
+    for i in range(len(date_list) - 1):
+        begin = datetime.datetime.strptime(date_list[i], "%Y-%m-%d %H:%M:%S")
+        end = datetime.datetime.strptime(date_list[i + 1], "%Y-%m-%d %H:%M:%S")
+
+        days = TransferMoney.objects.filter(to_user=admin_user, create_time__range=(begin, end))
+        total = 0.0
+        for day in days:
+            total = total + float(day.money)
+        if date_list[i] not in x:
+            x.append(date_list[i])
+            y.append(round(total, 2))
+    yDict = {"name": "Daily expend", "type": "line", "data": y}
+    last = {
+        "xList": x,
+        "yList": [yDict],
+        "titleList": ["Daily expend"]
+    }
+    return success(last)
+
+# Extraction of profit information
+@csrf_exempt
+def profit_statistics(request):
+    admin_user = UserProfile.objects.filter(username="JINCHEN")[0]
+    x = []
+    y = []
+    begin_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
+    date_list = []
+    begin_date = datetime.datetime.strptime(begin_date, "%Y-%m-%d")
+    # end_date = datetime.datetime.strptime(time.strftime('%Y-%m-%d', time.localtime(time.time())), "%Y-%m-%d")
+
+    # Time format conversion
+    now_time = int(time.time()) + 86400
+    day_time = now_time - now_time % 86400 + time.timezone
+    dateArray = datetime.datetime.fromtimestamp(day_time)
+    otherStyleTime = dateArray.strftime("%Y-%m-%d")
+    end_date = datetime.datetime.strptime(otherStyleTime, "%Y-%m-%d")
+    while begin_date <= end_date:
+        date_str = begin_date.strftime("%Y-%m-%d %H:%M:%S")
+        date_list.append(date_str)
+        begin_date += datetime.timedelta(days=1)
+    # Time format conversion
+    date_list.append("2022-05-25 00:00:00")
+    date_list.append("2022-05-25 00:00:00")
+    for i in range(len(date_list) - 1):
+        begin = datetime.datetime.strptime(date_list[i], "%Y-%m-%d %H:%M:%S")
+        end = datetime.datetime.strptime(date_list[i + 1], "%Y-%m-%d %H:%M:%S")
+
+        income_days = TransferMoney.objects.filter(create_time__range=(begin, end), to_user=admin_user)
+        income_total = 0.0
+        for day in income_days:
+            income_total = income_total + float(day.money)
+
+        expend_days = TransferMoney.objects.filter(create_time__range=(begin, end), from_user=admin_user)
+        expend_total = 0.0
+        for day in expend_days:
+            expend_total = expend_total + float(day.money)
+
+        cha = income_total - expend_total
+        if date_list[i] not in x:
+            x.append(date_list[i])
+            y.append(round(cha, 2))
+
+    yDict = {"name": "Daily Profit", "type": "line", "data": y}
+    last = {
+        "xList": x,
+        "yList": [yDict],
+        "titleList": ["Daily Profit"]
+    }
+    return success(last)
+
+# Information extraction and processing of daily statistics as website
+@csrf_exempt
+def day_statistics(request):
+    x = []
+    y = []
+    # Calculate daily statistics within one month
+    # Extract the time range of one month from now
+    begin_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
+    date_list = []
+    begin_date = datetime.datetime.strptime(begin_date, "%Y-%m-%d")
+    # end_date = datetime.datetime.strptime(time.strftime('%Y-%m-%d', time.localtime(time.time())), "%Y-%m-%d")
+    # Time format conversion
+    now_time = int(time.time()) + 86400
+    day_time = now_time - now_time % 86400 + time.timezone
+    dateArray = datetime.datetime.fromtimestamp(day_time)
+    otherStyleTime = dateArray.strftime("%Y-%m-%d")
+    end_date = datetime.datetime.strptime(otherStyleTime, "%Y-%m-%d")
+    while begin_date <= end_date:
+        date_str = begin_date.strftime("%Y-%m-%d %H:%M:%S")
+        date_list.append(date_str)
+        begin_date += datetime.timedelta(days=1)
+    # Time format conversion
+    date_list.append("2022-05-25 00:00:00")
+    date_list.append("2022-05-25 00:00:00")
+    for i in range(len(date_list) - 1):
+        begin = datetime.datetime.strptime(date_list[i], "%Y-%m-%d %H:%M:%S")
+        end = datetime.datetime.strptime(date_list[i + 1], "%Y-%m-%d %H:%M:%S")
+
+        days = TransferMoney.objects.filter(create_time__range=(begin, end))
+        total = 0.0
+        for day in days:
+            total = total + float(day.money)
+        if date_list[i] not in x:
+            x.append(date_list[i])
+            y.append(round(total, 2))
+    yDict = {"name": "Platform turnover", "type": "line", "data": y}
+    last = {
+        "xList": x,
+        "yList": [yDict],
+        "titleList": ["Platform turnover"]
+    }
+    return success(last)
+
+
+# Display statistics of a year by month
+@csrf_exempt
+def annual_statistics(request):
+    x = []
+    y = []
+    # Gets the time one year before the current time, the earliest date is December 11, 2020
+    begin_date = datetime.datetime.now().strftime("2020-12-11")
+    # print(begin_date)
+    date_list = getBetweenMonth(begin_date)
+    date_list.append(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    date_list.append(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    # print(date_list)
+    for i in range(len(date_list) - 1):
+        begin = datetime.datetime.strptime(date_list[i], "%Y-%m-%d %H:%M:%S")
+        end = datetime.datetime.strptime(date_list[i + 1], "%Y-%m-%d %H:%M:%S")
+
+        days = TransferMoney.objects.filter(create_time__range=(begin, end))
+        total = 0.0
+        # Calculate monthly statistics
+        for day in days:
+            total = total + float(day.money)
+        # Select the value of the XY coordinate
+        if date_list[i] not in x:
+            x.append(date_list[i])
+            y.append(round(total, 2))
+    yDict = {"name": "Monthly System Statement", "type": "line", "data": y}
+    last = {
+        "xList": x,
+        "yList": [yDict],
+        "titleList": ["Monthly System Statement"]
+    }
+    return success(last)
+
+
+# Display statistics by selected time period
+@login_required
+def search_data(request):
+    user = request.user
+    try:
+        # Judge whether the user is boss or administrator
+        if user.mtype != 2:
+            msg = "You are not the BOSS can not view"
+            return render(request, "errinfo.html", locals())
+
+        keywords = request.GET.get('keywords', '')
+        try:
+            keywords = keywords.strip()
+        except:
+            pass
+        if keywords is None or keywords == "":
+            expenditure_statistics = TransferMoney.objects.filter(from_user_id=1).aggregate(money_total=Sum('money'))
+            income_statistics = TransferMoney.objects.filter(to_user_id=1).aggregate(money_total=Sum('money'))
+            turnover_statistics = TransferMoney.objects.filter(~Q(from_user_id=1), ~Q(to_user_id=1)).aggregate(
+                money_total=Sum('money'))
+        else:
+            date_arr = keywords.split(" - ")
+            start_date = date_arr[0] + " 00:00:00"
+            end_date = date_arr[1] + " 23:59:59"
+            expenditure_statistics = TransferMoney.objects.filter(create_time__gte=start_date, create_time__lte=end_date).filter(
+                from_user_id=1).aggregate(money_total=Sum('money'))
+            income_statistics = TransferMoney.objects.filter(create_time__gte=start_date, create_time__lte=end_date).filter(
+                to_user_id=1).aggregate(money_total=Sum('money'))
+            turnover_statistics = TransferMoney.objects.filter(create_time__gte=start_date,
+                                                          create_time__lte=end_date).filter(~Q(from_user_id=1),
+                                                                                            ~Q(to_user_id=1)).aggregate(
+                money_total=Sum('money'))
+    except Exception as e:
+        print(e)
+    return render(request, "search_data.html", locals())
+
+
+# Method of taking month range
+def getBetweenMonth(begin_date):
+    date_list = []
+    begin_date = datetime.datetime.strptime(begin_date, "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(time.strftime('%Y-%m-%d', time.localtime(time.time())), "%Y-%m-%d")
+    # print(begin_date)
+    # print(end_date)
+    while begin_date <= end_date:
+        date_str = begin_date.strftime("%Y-%m-01 %H:%M:%S")
+        date_list.append(date_str)
+        begin_date = add_months(begin_date, 1)
+    return date_list
+
+def add_months(dt, months):
+    month = dt.month - 1 + months
+    # print(month)
+    year = int(dt.year + month / 12)
+    # print(year)
+    month = int(month % 12) + 1
+    # print(month)
+    day = min(dt.day, calendar.monthrange(year, month)[1])
+    return dt.replace(year=year, month=month, day=day)
+
+def menu(request):
+    try:
+        user = request.user
+    except Exception as e:
+        print(e)
+    return HttpResponse(json.dumps(settings.MENU))
+
+
 # Seller personal information page Jump
 @login_required
 def sell_userinfo(request):
