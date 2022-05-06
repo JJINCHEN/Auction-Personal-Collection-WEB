@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserProfile
@@ -462,8 +464,8 @@ def charging(request):
             only.save()
             msg = "Recharge success"
             # return HttpResponse("Successful")
-            # return redirect("/buy_userinfo")
-            return render(request, "buy_userinfo.html", locals())
+            return redirect("/buy_userinfo?success")
+            # return render(request, "buy_userinfo.html", locals())
         else:
             msg = "Request error"
             # return HttpResponse("error")
