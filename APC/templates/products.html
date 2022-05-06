@@ -99,13 +99,11 @@
         </ul>
     </section>
     <section>
-        <div class="row">
-            <div class="col-md-12">
                 <div class="row">
                     {% for product in all_products %}
                     {% if product.mstatus == "1" or product.mstatus == "0" %}
                     <div class="col-sm-3"
-                         style=" border: 2px solid #FFFFFF; border-radius: 20px; background-color: #3c3c3c; padding-top:15px; margin-top:15px; margin-right: 5px">
+                         style=" border: 1px solid #95999c; border-radius: 20px; background-color: #3c3c3c; padding-top:15px; margin-top:15px;">
                         <a href="/detail_products/?pid={{ product.id }}">
                             <img src="/media/{{ product.img }}" alt="" width="100%">
                             <p>{{ product.name }}</p>
@@ -120,8 +118,6 @@
                     </div>
                     {% endfor %}
                 </div>
-            </div>
-        </div>
     </section>
     <script>
         $('p[name=countdown]').each(function () {
