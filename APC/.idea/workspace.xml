@@ -1,65 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a8d3962c-2dca-4a08-b13b-367fedfe4583" name="更改" comment="" />
+    <list default="true" id="4a128d4e-930f-4991-bf3d-4ed2a052dd35" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
-  <component name="ProjectId" id="20S8BLfMRjeDRxxJo2rTdZN1tUo" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1z55H1rBago6PghkilBzRJkbo8L" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/APC/static" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
-    <configuration name="APC" type="Python.DjangoServer" factoryName="Django server">
-      <module name="APC" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static" />
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\js" />
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\templates" />
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\css" />
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\APC" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\css" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
-      <changelist id="a8d3962c-2dca-4a08-b13b-367fedfe4583" name="更改" comment="" />
-      <created>1636026492068</created>
+      <changelist id="4a128d4e-930f-4991-bf3d-4ed2a052dd35" name="更改" comment="" />
+      <created>1633425019182</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1636026492068</updated>
-      <workItem from="1636026499106" duration="1537000" />
+      <updated>1633425019182</updated>
+      <workItem from="1633425019755" duration="4991000" />
+      <workItem from="1633452346370" duration="70000" />
+      <workItem from="1635862071207" duration="766000" />
+      <workItem from="1636024688796" duration="1786000" />
+      <workItem from="1636026537870" duration="12000" />
+      <workItem from="1636552382741" duration="7764000" />
+      <workItem from="1636800532355" duration="9796000" />
+      <workItem from="1636967166175" duration="3998000" />
+      <workItem from="1637067273464" duration="2781000" />
+      <workItem from="1638185981898" duration="10648000" />
+      <workItem from="1638276554935" duration="2586000" />
+      <workItem from="1639467776054" duration="6853000" />
+      <workItem from="1644835108476" duration="11251000" />
+      <workItem from="1645823204839" duration="9852000" />
+      <workItem from="1646041916332" duration="8035000" />
+      <workItem from="1647216291540" duration="7212000" />
+      <workItem from="1647260255094" duration="5149000" />
+      <workItem from="1647694082016" duration="9487000" />
+      <workItem from="1647785883887" duration="656000" />
+      <workItem from="1648426017625" duration="4491000" />
+      <workItem from="1648440840053" duration="593000" />
+      <workItem from="1648468927274" duration="5450000" />
+      <workItem from="1650635571867" duration="10729000" />
+      <workItem from="1650811304404" duration="1148000" />
+      <workItem from="1651589672885" duration="1243000" />
+      <workItem from="1651697173343" duration="1250000" />
+      <workItem from="1651779838908" duration="9789000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
