@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from .forms import LoginForm
+from sell.models import Product, Category, BuyPrice, Order, TransferMoney
+from django.contrib.auth.hashers import make_password, check_password
 import re
 
 
@@ -207,10 +210,14 @@ def user_login(request):
                     # user.backend = 'django.contrib.auth.backends.ModelBackend' # Specify the default login authentication method
                     login(request, user)
                 else:
-                    return render(request, 'errinfo.html')
-                return render(request, 'succ.html')
+                    errorinfo = "Incorrect account or password"
+                    return render(request, 'login.html', {'login_form': login_form, "msg": errorinfo})
+                if user.mtype == 2:
+                    return redirect("/statistics_index")
+                return redirect("/")
             else:
-                return render(request, 'errinfo.html')
+                errorinfo = "Incorrect account or password"
+                return render(request, 'login.html', {'login_form': login_form, "msg": errorinfo})
         else:
             login_form = LoginForm()
             return render(request, 'login.html', {'login_form': login_form})
@@ -229,3 +236,367 @@ def user_logout(request):
     except Exception as e:
         print(e)
     return render(request, "error.html", {"msg": "Exit error"})
+
+
+# The judgment of modifying the buyer's password
+def modify_buy_password(request):
+    # Confirm user
+    user = request.user
+    categories = Category.objects.filter()
+    products = BuyPrice.objects.filter(user=user).values("product")
+    orders = Order.objects.filter(user=user)
+    try:
+        # Judge the form
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            # Extract form input
+            old_password = request.POST.get("old_password")
+            pwd1 = request.POST.get("pwd1")
+            pwd2 = request.POST.get("pwd2")
+            # Show incoming data
+            # print("===")
+            # print(old_password)
+            # print(pwd1)
+            # print(pwd2)
+
+            if len(old_password) < 6 or len(pwd1) < 6 or len(pwd2) < 6:
+                msg = "The password must be greater than 6 digits"
+                return render(request, "buy_userinfo.html", locals())
+            if pwd1 != pwd2:
+                msg = "The two passwords are inconsistent"
+                return render(request, "buy_userinfo.html", locals())
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user no longer exists"
+                return render(request, "buy_userinfo.html", locals())
+            only = only[0]
+            # Show incoming data
+            # print(only.password)
+            # print(make_password(old_password))
+
+            if check_password(old_password, only.password) == False:
+                msg = "The old password is incorrect"
+                return render(request, "buy_userinfo.html", locals())
+            only.password = make_password(pwd1)
+            only.save()
+            msg = "Modified successfully"
+            return redirect("/buy_userinfo")
+        else:
+            msg = "Request error"
+            return render(request, "buy_userinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        return render(request, "buy_userinfo.html", locals())
+
+
+# The judgment of modifying address
+def address(request):
+    # Confirm user
+    user = request.user
+    categories = Category.objects.filter()
+    products = Product.objects.filter(sell_user=user)
+    try:
+        # Judge the form
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            # Extract form input
+            address = request.POST.get("address")
+            # Judge that the input address must be greater than 6 digits
+            if len(address) < 6:
+                msg = "The address must be greater than six digits"
+                return render(request, "buy_userinfo.html", locals())
+
+            only = UserProfile.objects.filter(username=user.username)
+            # Judge whether the user exists
+            if len(only) == 0:
+                msg = "The user does not exist"
+                return render(request, "buy_userinfo.html", locals())
+            only = only[0]
+            only.address = address
+            only.save()
+            msg = "Modified successfully"
+            return redirect("/buy_userinfo")
+        else:
+            return render(request, "buy_userinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+    return render(request, "buy_userinfo.html", locals())
+
+
+# The judgment of modifying the seller's password
+def modify_sell_password(request):
+    # Confirm user
+    user = request.user
+    categories = Category.objects.filter()
+    products = Product.objects.filter(sell_user=user)
+    try:
+        # Judge form input
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            # Extract form input
+            old_password = request.POST.get("old_password")
+            pwd1 = request.POST.get("pwd1")
+            pwd2 = request.POST.get("pwd2")
+            # Show incoming data
+            # print("===")
+            # print(old_password)
+            # print(pwd1)
+            # print(pwd2)
+
+            # Judge whether the length of the old password and the new password meet the requirements
+            if len(old_password) < 6 or len(pwd1) < 6 or len(pwd2) < 6:
+                msg = "The password must be greater than 6 digits"
+                return render(request, "sell_userinfo.html", locals())
+            # Judge whether the new password entered twice is the same
+            if pwd1 != pwd2:
+                msg = "The two passwords are inconsistent"
+                return render(request, "sell_userinfo.html", locals())
+
+            # Judge whether the user exists according to the user name
+            only = UserProfile.objects.filter(username=user.username)
+            # Judge whether the user exists according
+            if len(only) == 0:
+                msg = "The user does not exist"
+                return render(request, "sell_userinfo.html", locals())
+            only = only[0]
+            # # Show incoming data
+            # print(only.password)
+            # print(make_password(old_password))
+            # print(only.password == make_password(old_password))
+
+            # Determine whether the old password is entered correctly
+            if check_password(old_password, only.password) == False:
+                msg = "The old password is incorrect"
+                return render(request, "sell_userinfo.html", locals())
+
+            # Change the new password to the database
+            only.password = make_password(pwd1)
+            only.save()
+            msg = "Modified successfully"
+            # return seller information page
+            return redirect("/sell_userinfo")
+        else:
+            msg = "Request error"
+            # return seller information page
+            return render(request, "sell_userinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        # return seller information page
+        return render(request, "sell_userinfo.html", locals())
+
+
+# Modify bank card number
+def bank(request):
+    user = request.user
+    categories = Category.objects.filter()
+    products = Product.objects.filter(sell_user=user)
+    try:
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            bank_no = request.POST.get("bank_no")
+            # The number of digits of a bank card number must be 16
+            if len(bank_no) != 16:
+                msg = "Bank card number must be 16 digits"
+                return render(request, "sell_userinfo.html", locals())
+            # Judge whether the user exists
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user does not exist"
+                return render(request, "sell_userinfo.html", locals())
+            only = only[0]
+            only.bank_no = bank_no
+            only.save()
+            msg = "Modified successfully"
+            return redirect("/sell_userinfo")
+        else:
+            return render(request, "sell_userinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+    return render(request, "sell_userinfo.html", locals())
+
+
+# The buyer enters the amount to recharge into his account balance
+def charging(request):
+    user = request.user
+    categories = Category.objects.filter()
+    products = BuyPrice.objects.filter(user=user).values("product")
+    orders = Order.objects.filter(user=user)
+    try:
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            money = request.POST.get("money")
+            # Determine that the input numbers conform to the correct format
+            if "." in money:
+                last = money.split(".")[1]
+                if len(last) > 2:
+                    msg = "Failure: decimal point must be followed by two digits!!!!!"
+                    return render(request, "buy_userinfo.html", locals())
+            # Verify that the input cannot be empty
+            try:
+                money = float(money)
+            except Exception as e:
+                print(e)
+                msg = "Error: input is not a number or input cannot be empty!"
+                return render(request, "buy_userinfo.html", locals())
+            # Verify that the input cannot be equal to 0
+            if money == 0.0:
+                msg = "Error: recharge amount must be greater than 0"
+                return render(request, "buy_userinfo.html", locals())
+            # Judge whether the user exists
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user no longer exists"
+                return render(request, "buy_userinfo.html", locals())
+            only = only[0]
+            # Input the amount plus the balance into the database
+            only.money = only.money + money
+            only.save()
+            msg = "Recharge success"
+            # return HttpResponse("Successful")
+            # return redirect("/buy_userinfo")
+            return render(request, "buy_userinfo.html", locals())
+        else:
+            msg = "Request error"
+            # return HttpResponse("error")
+            return render(request, "buy_userinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        return render(request, "buy_userinfo.html", locals())
+
+
+# The balance of the seller's user is withdrawn from the required money to the user's bank card
+def withdraw(request):
+    user = request.user
+    categories = Category.objects.filter()
+    products = Product.objects.filter(sell_user=user)
+    try:
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            money = request.POST.get("money")
+            email = request.POST.get("email")
+            bank_no = request.POST.get("bank_no")
+            # Determine that the input money meets the requirements, and give a hint if it does not
+            # Judge whether the input meets the currency standard
+            if "." in money:
+                last = money.split(".")[1]
+                if len(last) > 2:
+                    msg = "Failure: decimal point must be followed by two digits!!!!!"
+                    return render(request, "buy_userinfo.html", locals())
+            # Determines whether the input is empty or numeric
+            try:
+                money = float(money)
+            except Exception as e:
+                print(e)
+                msg = "Error: input is not a number or input cannot be empty!"
+                return render(request, "sell_userinfo.html", locals())
+            # Determine that the input must be greater than 0
+            if money == 0.0:
+                msg = "Error: withdrawal amount must be greater than 0"
+                return render(request, "sell_userinfo.html", locals())
+            # Judge that the amount withdrawn by the user must be greater than the balance
+            if int(money) > int(user.money):
+                msg = "Error: the withdrawal amount must be less than the amount you have"
+                return render(request, "sell_userinfo.html", locals())
+            # Judge whether the user exists
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user does not exist"
+                return render(request, "sell_userinfo.html", locals())
+            only = only[0]
+            # Save the balance minus the withdrawal amount into the database
+            only.money = only.money - money
+            only.save()
+            msg = "Successful withdrawal"
+            return redirect("/sell_userinfo")
+        else:
+            msg = "Request error"
+            return render(request, "errinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        return render(request, "errinfo.html", locals())
+
+
+# Re judgment of buyer user's modified information
+def user_buy_modify(request):
+    user = request.user
+    categories = Category.objects.filter()
+    products = BuyPrice.objects.filter(user=user).values("product")
+    orders = Order.objects.filter(user=user)
+    try:
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+            address = request.POST.get("address")
+            if len(username) < 6 or len(address) < 6:
+                msg = "Username or address must be greater than 6 digits"
+                return render(request, "buy_userinfo.html", locals())
+            # Judge whether the user exists
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user no longer exists"
+                return render(request, "buy_userinfo.html", locals())
+            only = only[0]
+            only.username = username
+            only.email = email
+            only.address = address
+            only.save()
+            msg = "Modified successfully"
+            return redirect("/buy_userinfo")
+        else:
+            msg = "Request error"
+            return render(request, "errinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        return render(request, "errinfo.html", locals())
+
+
+# Re judgment of seller user after modifying information
+def user_sell_modify(request):
+    user = request.user
+    categories = Category.objects.filter()
+    products = Product.objects.filter(sell_user=user)
+    try:
+        if request.method == "POST":
+            user = request.user
+            datas = request.POST
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+            bank_no = request.POST.get("bank_no")
+            if len(username) < 6 or re.match(r'[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z_]{0,19}.com', email) == None or len(
+                    bank_no) < 6:
+                msg = "The user does not exist or have error"
+                return render(request, "sell_userinfo.html", locals())
+            # Judge whether the user exists
+            only = UserProfile.objects.filter(username=user.username)
+            if len(only) == 0:
+                msg = "The user does not exist"
+                return render(request, "sell_userinfo.html", locals())
+            only = only[0]
+            only.username = username
+            only.email = email
+            only.bank_no = bank_no
+            only.save()
+            msg = "Modified successfully"
+            return redirect("/sell_userinfo")
+        else:
+            msg = "Request error"
+            return render(request, "errinfo.html", locals())
+    except Exception as e:
+        print(e)
+        msg = "System error"
+        return render(request, "errinfo.html", locals())
