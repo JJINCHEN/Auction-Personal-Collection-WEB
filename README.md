@@ -27,3 +27,6 @@ Local run project
 5.	Synchronisation of model classes to the database, generation of migration files: py manage.py makemigrations
 6.	Synchronisation to the database: py manage.py migrate
 7.	Local start-up project, Terminal input: py manage.py runserver
+
+Poster
+![poster-2-A1](https://user-images.githubusercontent.com/91751667/167270524-6f4e6099-ad4e-4de1-8b2c-2e4c6afdb081.jpg)
