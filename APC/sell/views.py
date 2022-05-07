@@ -163,10 +163,10 @@ def profit_statistics(request):
         for day in expend_days:
             expend_total = expend_total + float(day.money)
 
-        cha = income_total - expend_total
+        dif = income_total - expend_total
         if date_list[i] not in x:
             x.append(date_list[i])
-            y.append(round(cha, 2))
+            y.append(round(dif, 2))
 
     yDict = {"name": "Daily Profit", "type": "line", "data": y}
     last = {
@@ -409,14 +409,14 @@ def add_pro(request):
                 time_split = timerange.split(" - ")
                 begin = time_split[0]
                 end = time_split[1]
-                print(begin)
-                print(end)
+                # print(begin)
+                # print(end)
                 begin_mysql = datetime.datetime.strptime(begin, "%Y-%m-%d %H:%M:%S")
                 end_mysql = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
                 begin_stamp = get_stamp_by_time(begin)
                 end_stamp = get_stamp_by_time(end)
-                print(end_stamp)
-                print(begin_stamp)
+                # print(end_stamp)
+                # print(begin_stamp)
                 if float(end_stamp) <= float(begin_stamp):
                     msg = "Error: End time is less than or equal to start time!"
                     return render(request, "sell_userinfo.html", locals())
@@ -471,9 +471,9 @@ def products(request):
         all_category = Category.objects.filter()
         # Display by category ID
         if cid:
-            print(cid)
+            # print(cid)
             category_obj = Category.objects.filter(id=cid)
-            print(category_obj)
+            # print(category_obj)
             if len(category_obj) > 0:
                 category_obj = category_obj[0]
                 all_products = all_products.filter(category=category_obj)
@@ -482,14 +482,14 @@ def products(request):
             all_products = all_products.filter(name__contains=search, detail=search)
         # Search all product names with search data
         for product in all_products:
-            print(product.name)
+            # print(product.name)
             now = float(get_now_stamp())
             begin = product.sell_begin_stamp
             end = product.sell_end_stamp
             dif = begin - now
             if now < begin:
                 product.__setattr__("mstatus", "0")
-                product.__setattr__("cha", str(int(dif)))
+                product.__setattr__("dif", str(int(dif)))
             elif now >= begin and now <= end:
                 product.__setattr__("mstatus", "1")
             else:
@@ -537,12 +537,12 @@ def detail_products(request):
 @csrf_exempt
 def bid(request):
     user = request.user
-    print(user.mtype)
+    # print(user.mtype)
     try:
         # It is necessary to judge that the bidding user is the buyer
         if request.method == "POST" and user.mtype == 0:
-            print(request.POST)
-            print(request.body)
+            # print(request.POST)
+            # print(request.body)
             # If it is a POST request, get the submitted parameters
             price = request.POST.get("price")
             pid = request.POST.get("pid")
@@ -607,8 +607,8 @@ def pay(request):
     orders = Order.objects.filter(user=user)
     try:
         if request.method == "POST":
-            print(request.POST)
-            print(request.body)
+            # print(request.POST)
+            # print(request.body)
             # If it is a POST request, get the submitted parameters
             pid = request.POST.get("pid")
             order = Order.objects.filter(id=int(pid))

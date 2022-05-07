@@ -60,7 +60,7 @@ class Product(models.Model):
         return price
 
     def get_current_user(self):
-        print(1111111)
+        # print(1111111)
         user = "No one bought it"
         user_buy = BuyPrice.objects.filter(product=self)
         if len(user_buy) > 0:
