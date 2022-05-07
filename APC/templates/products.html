@@ -108,7 +108,7 @@
                             <img src="/media/{{ product.img }}" alt="" width="100%">
                             <p>{{ product.name }}</p>
                         </a>
-                        <p>Current price: ￥ {{ product.price | floatformat:2 }}</p>
+                        <p>Current price: ￡ {{ product.price | floatformat:2 }}</p>
                         <p>Auction start time: {{ product.sell_begin }}</p>
                         <p>Auction end time: {{ product.sell_end }}</p>
                         <p name="countdown" time="{{ product.sell_end_stamp }}" status="{{ product.mstatus }}"
@@ -132,29 +132,29 @@
                 $("#" + id).text("Auction not started")
             } else if (mstatus == "1") {
                 window.setInterval(function () {
-                    console.log("------------------------------")
+                    // console.log("------------------------------")
                     var now = Number("" + Date.parse(new Date()) / 1000);
                     var nbegin = Number(begin);
                     var dif = nbegin - now
-                    console.log("begintype:" + typeof (nbegin))
-                    console.log("begin:" + nbegin)
-                    console.log("now:" + now)
-                    console.log("nowtype:" + typeof (now))
-                    console.log("dif:" + dif)
-                    console.log(now <= nbegin)
+                    // console.log("begintype:" + typeof (nbegin))
+                    // console.log("begin:" + nbegin)
+                    // console.log("now:" + now)
+                    // console.log("nowtype:" + typeof (now))
+                    // console.log("dif:" + dif)
+                    // console.log(now <= nbegin)
                     if (now <= nbegin) {
-                        console.log("Countdown: " + dif + "s")
+                        // console.log("Countdown: " + dif + "s")
                         var hour = parseInt(dif / 3600)
                         var min = parseInt((dif - (hour * 3600)) / 60)
-                        var miao = parseInt(dif - (hour * 3600) - (min * 60))
-                        $("#" + id).text("Countdown: " + hour + "h," + min + "m，" + miao + "s")
+                        var second = parseInt(dif - (hour * 3600) - (min * 60))
+                        $("#" + id).text("Countdown: " + hour + "h," + min + "m，" + second + "s")
                     } else {
-                        console.log("Countdown: " + dif + "s")
-                        $("#" + id).text("uction closed")
+                        // console.log("Countdown: " + dif + "s")
+                        $("#" + id).text("Action finished")
                     }
                 }, 1000);
             } else {
-                $("#" + id).text("uction closed")
+                $("#" + id).text("Action finished")
             }
         });
     </script>
