@@ -123,8 +123,8 @@
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align: right;">
-                                <input type="text" id="gei">
-                                <button type="button" class="btn btn-info" onclick="pai('{{ product.id }}')">Bid
+                                <input type="text" id="num">
+                                <button type="button" class="btn btn-info" onclick="bidd('{{ product.id }}')">Bid
                                 </button>
                             </td>
                         </tr>
@@ -166,8 +166,8 @@
     </div>
 </div>
 <script>
-    function pai(pid) {
-        var price = $("#gei").val()
+    function bidd(pid) {
+        var price = $("#num").val()
         $.ajax({
             type: "POST",
             url: "/bid",
