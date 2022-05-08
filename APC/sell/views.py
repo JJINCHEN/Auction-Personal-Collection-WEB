@@ -20,7 +20,7 @@ import calendar
 
 
 # Create your views here.
-# Jump to main page
+# Update information
 def index(request):
     try:
         order_task()
