@@ -43,8 +43,8 @@ def order_task():
         else:
             # print("11")
             # print(product.price)
-            # The company pays 10% compensation for not selling
-            pei = product.price * 0.1
+            # The platform pays 10% compensation for not selling
+            paid = product.price * 0.1
             # print(pei)
             product.status = "5"
             product.buy_user = admin_user
@@ -53,12 +53,11 @@ def order_task():
             transfer = TransferMoney()
             transfer.from_user = admin_user
             transfer.to_user = product.sell_user
-            transfer.money = pei
-            transfer.ttype = 2
-            transfer.ptype = 1
+            transfer.money = paid
+            transfer.ttype = 1
 
             # The compensation money is deposited in the user's balance
-            product.sell_user.money = product.sell_user.money + pei
+            product.sell_user.money = product.sell_user.money + paid
             product.save()
             transfer.save()
             product.sell_user.save()
