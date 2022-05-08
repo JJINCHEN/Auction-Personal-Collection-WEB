@@ -147,7 +147,7 @@
                         var hour = parseInt(dif / 3600)
                         var min = parseInt((dif - (hour * 3600)) / 60)
                         var second = parseInt(dif - (hour * 3600) - (min * 60))
-                        $("#" + id).text("Countdown: " + hour + "h," + min + "m，" + second + "s")
+                        $("#" + id).text("Countdown: " + hour + "h," + min + "m," + second + "s")
                     } else {
                         // console.log("Countdown: " + dif + "s")
                         $("#" + id).text("Action finished")
