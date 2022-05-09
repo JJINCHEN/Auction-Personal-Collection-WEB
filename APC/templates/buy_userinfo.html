@@ -177,7 +177,7 @@
                                 {% for order in orders %}
                                 <tr>
                                     <th scope="row"><a
-                                            href="/detail_products?gid={{ order.product.id }}">{{ order.product.name }}</a>
+                                            href="/detail_products?pid={{ order.product.id }}">{{ order.product.name }}</a>
                                     </th>
                                     <td>{{ order.price| floatformat:2 }}</td>
                                     <td>{{ order.get_status_display }}</td>
