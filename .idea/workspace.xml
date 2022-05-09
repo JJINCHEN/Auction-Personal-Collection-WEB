@@ -18,9 +18,18 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/APC" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="f0a5b0a5-b468-49bd-af59-51209dc235f2" />
+        <option name="url" value="https://github.com/JJINCHEN/Website-Development-Project--Auction-Personal-Collection-" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectId" id="1z55H1rBago6PghkilBzRJkbo8L" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -30,18 +39,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Plymouth/10-JiangMengyu-GU2/Jinsheng-v5-Final" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static" />
       <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\js" />
       <recent name="D:\Website Development Project-Auction Personal Collection\APC\templates" />
-      <recent name="D:\Website Development Project-Auction Personal Collection\APC\static" />
       <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\css" />
-      <recent name="D:\Website Development Project-Auction Personal Collection\APC\accounts" />
+      <recent name="D:\Website Development Project-Auction Personal Collection\APC\APC" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Website Development Project-Auction Personal Collection\APC\static\css" />
@@ -67,6 +76,26 @@
       <workItem from="1638185981898" duration="10648000" />
       <workItem from="1638276554935" duration="2586000" />
       <workItem from="1639467776054" duration="6853000" />
+      <workItem from="1644835108476" duration="11251000" />
+      <workItem from="1645823204839" duration="9852000" />
+      <workItem from="1646041916332" duration="8035000" />
+      <workItem from="1647216291540" duration="7212000" />
+      <workItem from="1647260255094" duration="5149000" />
+      <workItem from="1647694082016" duration="9487000" />
+      <workItem from="1647785883887" duration="656000" />
+      <workItem from="1648426017625" duration="4491000" />
+      <workItem from="1648440840053" duration="593000" />
+      <workItem from="1648468927274" duration="5450000" />
+      <workItem from="1650635571867" duration="10729000" />
+      <workItem from="1650811304404" duration="1148000" />
+      <workItem from="1651589672885" duration="1243000" />
+      <workItem from="1651697173343" duration="1250000" />
+      <workItem from="1651779838908" duration="16717000" />
+      <workItem from="1651804914840" duration="699000" />
+      <workItem from="1651938568841" duration="24389000" />
+      <workItem from="1652030118509" duration="5713000" />
+      <workItem from="1652074428243" duration="371000" />
+      <workItem from="1652085183560" duration="3778000" />
     </task>
     <servers />
   </component>
