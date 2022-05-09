@@ -479,7 +479,7 @@ def products(request):
                 all_products = all_products.filter(category=category_obj)
         # Display by search
         if search:
-            all_products = all_products.filter(name__contains=search, detail=search)
+            all_products = all_products.filter(name__contains=search)
         # Search all product names with search data
         for product in all_products:
             # print(product.name)
